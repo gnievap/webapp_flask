@@ -1,0 +1,20 @@
+{%  extends 'bootstrap/base.html' %}
+
+{% block head %}
+    {{ super() }}
+
+    <title>
+        {% block title %} Flask Web App |  {% endblock %}
+    </title>
+{% endblock %}
+
+{% block body %}
+    {% block navbar %}
+        {% include 'navbar.html' %}
+    </header>
+    {% endblock %}
+
+    {% block content %}
+        <p>Esto es una prueba</p>
+    {% endblock %} 
+{% endblock %}
