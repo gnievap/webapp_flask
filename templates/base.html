@@ -2,10 +2,10 @@
 
 {% block head %}
     {{ super() }}
-
     <title>
         {% block title %} Flask Web App |  {% endblock %}
     </title>
+    <link rel="stylesheet" href="../static/style/style.css">
 {% endblock %}
 
 {% block body %}
@@ -15,6 +15,9 @@
     {% endblock %}
 
     {% block content %}
-        <p>Esto es una prueba</p>
+        <div class="container">
+            <img src="../static/assets/portada.jpg" alt="Inicio">
+        </div>
+        
     {% endblock %} 
 {% endblock %}
