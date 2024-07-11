@@ -89,8 +89,8 @@ def paises():
     conexion.close()
     return render_template('paises.html', datos=datos)
 
-@app.route('/update_pais', methods=['POST'])
-def update_pais():
+@app.route('/update_pais/<int:id_pais>', methods=['POST'])
+def update_pais(id_pais):
     conexion = psycopg2.connect(
         database="biblioteca3a",
         user="postgres",
@@ -99,13 +99,16 @@ def update_pais():
         port="5432"
     )
     cursor = conexion.cursor()
+    cursor.execute('''SELECT * FROM pais WHERE id_pais=%s''', id_pais)
+    #recuperar la informacion
+    datos = cursor.fetchall()
     id_pais = request.form['id_pais']
     nombre = request.form['nombre']
     datos = {
         'id_pais': id_pais,
         'nombre': nombre
     }
-    return render_template('editar_paises.html', datos=datos)
+    return render_template('editar_pais.html', datos=datos)
     
 @app.route('/delete_pais/<int:id_pais>', methods=['POST'])
 def delete_pais(id_pais):

@@ -1,0 +1,23 @@
+{% extends 'bootstrap/base.html' %}
+{% block head %}
+    {{ super() }}
+    <title>
+        {% block title %} 
+            Webapp Flask
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="../static/style/style.css">
+{% endblock %}
+
+{% block body %}
+
+    {% block navbar %}
+        {% include 'navbar.html' %}
+    {% endblock %}
+
+    {% block content %}
+    <h2>Editar país</h2>
+    <br>
+    <form action="" method="post">
+        
+    </form>
