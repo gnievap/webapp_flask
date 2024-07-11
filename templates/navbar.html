@@ -4,10 +4,10 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-link active" href="{{ url_for('login') }}">Login</a>
-          <a class="nav-link active" href="#">Libros</a>
-          <a class="nav-link" href="#">Autores</a>
-          <a class="nav-link" href="#">Editoriales</a>
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+          <a class="nav-link active" href="{{ url_for('libros') }}">Libros</a>
+          <a class="nav-link" href="{{ url_for('autores') }}">Autores</a>
+          <a class="nav-link" href="{{ url_for('editoriales') }}">Editoriales</a>
+          <a class="nav-link" href="{{ url_for('paises') }}">Países</a>
         </div>
       </div>
     </div>

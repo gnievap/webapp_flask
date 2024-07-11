@@ -1,0 +1,32 @@
+{% extends 'bootstrap/base.html' %}
+{% block head %}
+    {{ super() }}
+    <title>
+        {% block title %} 
+            Webapp Flask
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="../static/style/style.css">
+{% endblock %}
+
+{% block body %}
+
+    {% block navbar %}
+        {% include 'navbar.html' %}
+    {% endblock %}
+
+    {% block content %}
+    <table class="table table-success table-striped">
+        <tr>
+            <th scope="col">Id. de país</th>
+            <th scope="col">País</th>
+        </tr>
+        {% for pais in datos %}
+            <tr>
+                <td>{{ pais[0] }}</td>
+                <td>{{ pais[1] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+{% endblock %}

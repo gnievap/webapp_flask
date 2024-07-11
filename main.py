@@ -15,7 +15,6 @@ class LoginForm (FlaskForm):
 
 @app.route('/')
 def index():
-    #return 'Hello World'
     return render_template('base.html')
 
 @app.route('/login')
@@ -24,24 +23,67 @@ def login():
 
 @app.route('/libros')
 def libros():
-    # Connect to the database 
-    conn = psycopg2.connect(database="flask_db", 
-                            user="postgres", 
-                            password="root", 
-                            host="localhost", port="5432") 
-  
-    # create a cursor 
-    cur = conn.cursor() 
-  
-    # Select all products from the table 
-    cur.execute('''SELECT * FROM libros''') 
-  
-    # Fetch the data 
-    data = cur.fetchall() 
-  
-    # close the cursor and connection 
-    cur.close() 
-    conn.close() 
-  
-    return render_template('libros.html', data=data) 
-  
+    # Conectar con la base de datos
+    conexion = psycopg2.connect(
+        database="biblioteca3a",
+        user="postgres",
+        password="gnieva",
+        host="localhost",
+        port="5432"
+    )
+    # crear un cursor (objeto para recorrer las tablas)
+    cursor = conexion.cursor()
+    # ejecutar una consulta en postgres
+    cursor.execute('''SELECT * FROM libros_view''')
+    #recuperar la informacion
+    datos = cursor.fetchall()
+    #cerrar cursos y conexion a la base de datos
+    cursor.close()
+    conexion.close()
+    return render_template('libros.html', datos=datos)
+
+@app.route('/autores')
+def autores():
+    # Conectar con la base de datos
+    conexion = psycopg2.connect(
+        database="biblioteca3a",
+        user="postgres",
+        password="gnieva",
+        host="localhost",
+        port="5432"
+    )
+    # crear un cursor (objeto para recorrer las tablas)
+    cursor = conexion.cursor()
+    # ejecutar una consulta en postgres
+    cursor.execute('''SELECT * FROM autores_view''')
+    #recuperar la informacion
+    datos = cursor.fetchall()
+    #cerrar cursos y conexion a la base de datos
+    cursor.close()
+    conexion.close()
+    return render_template('autores.html', datos=datos)
+
+@app.route('/editoriales')
+def editoriales():
+    return 'Hola mundo'
+
+@app.route('/paises')
+def paises():
+     # Conectar con la base de datos
+    conexion = psycopg2.connect(
+        database="biblioteca3a",
+        user="postgres",
+        password="gnieva",
+        host="localhost",
+        port="5432"
+    )
+    # crear un cursor (objeto para recorrer las tablas)
+    cursor = conexion.cursor()
+    # ejecutar una consulta en postgres
+    cursor.execute('''SELECT * FROM pais''')
+    #recuperar la informacion
+    datos = cursor.fetchall()
+    #cerrar cursos y conexion a la base de datos
+    cursor.close()
+    conexion.close()
+    return render_template('paises.html', datos=datos)
