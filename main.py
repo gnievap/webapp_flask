@@ -14,6 +14,8 @@ class LoginForm (FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Enviar')
 
+
+
 @app.route('/')
 def index():
     return render_template('base.html')
@@ -89,7 +91,7 @@ def paises():
     conexion.close()
     return render_template('paises.html', datos=datos)
 
-@app.route('/update_pais/<int:id_pais>', methods=['POST'])
+@app.route('/update_pais1/<int:id_pais>', methods=['POST'])
 def update_pais(id_pais):
     conexion = psycopg2.connect(
         database="biblioteca3a",
@@ -110,6 +112,23 @@ def update_pais(id_pais):
     }
     return render_template('editar_pais.html', datos=datos)
     
+@app.route('/update_pais2/<int:id_pais>')
+def update_pais2(id_pais):
+    conexion = psycopg2.connect(
+        database="biblioteca3a",
+        user="postgres",
+        password="gnieva",
+        host="localhost",
+        port="5432"
+    )
+    cursor = conexion.cursor()
+    cursor.execute('''UPDATE pais SET nombre=%s WHERE id_pais=%s''', (id_pais,)) 
+    conexion.commit()
+    cursor.close() 
+    conexion.close() 
+    return redirect(url_for('index')) 
+
+
 @app.route('/delete_pais/<int:id_pais>', methods=['POST'])
 def delete_pais(id_pais):
     conexion = psycopg2.connect(
