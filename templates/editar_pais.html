@@ -2,8 +2,8 @@
 {% block head %}
     {{ super() }}
     <title>
-        {% block title %}
-            Webapp Flask
+        {% block title %} 
+            Biblioteca Web App - Editar país
         {% endblock %}
     </title>
     <link rel="stylesheet" href="../static/style/style.css">
@@ -16,10 +16,19 @@
     {% endblock %}
 
     {% block content %}
-    <h2>Editar país</h2>
-    <br>
-    <form action="{{ url_for('/update_pais2', id_pais=pais[0]) }}" method="post">
-        <input type="hidden" name="id" value="{{ row[0] }}">
-        <input type="text" name="nombre" value="{{ row[1] }}">
-        <input type="submit" value="Update">
-    </form>
+        <div class="container-fluid">
+            <h2>Edición de nombre del país</h2>
+            <br>
+            {% for pais in datos %}
+                <form action="{{ url_for('update2_pais',nombre=pais[1],id_pais=pais[0],) }}" method="post">
+                    <input type="hidden" name="id" value="{{pais[0]}}">
+                    <label for="nombre">Nombre del país</label>
+                    <input type="text" name="nombre" value="{{pais[1]}}">
+                    <input type="submit" value="Actualizar">
+                    <a href="{{url_for('index')}}">Cancelar</a>
+                </form>
+            {% endfor %}
+            
+        </div>
+    {% endblock %}
+{% endblock %}

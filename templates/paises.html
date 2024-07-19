@@ -16,23 +16,25 @@
     {% endblock %}
 
     {% block content %}
-    <h2>Países de los autores</h2>
-    <br>
-    <table class="table table-success table-striped">
-        <tr>
-            <th scope="col">Id. de país</th>
-            <th scope="col">País</th>
-        </tr>
-        {% for pais in datos %}
+    <div class="container fluid">
+        <h2>Países de los autores</h2>
+        <br>
+        <table class="table table-success table-striped">
             <tr>
-                <td>{{ pais[0] }}</td>
-                <td>{{ pais[1] }}</td>
-                <td><form action="{{ url_for('update_pais1', id_pais=pais[0]) }}" method="POST"><button>Editar</button></form></td>
-                <td><form action="{{ url_for('delete_pais', id_pais=pais[0]) }}" method="POST">
-                    <button type="submit">Eliminar</button>
-                </form></td>
+                <th scope="col">Id. de país</th>
+                <th scope="col">País</th>
             </tr>
-        {% endfor %}
-    </table>
-{% endblock %}
+            {% for pais in datos %}
+                <tr>
+                    <td>{{ pais[0] }}</td>
+                    <td>{{ pais[1] }}</td>
+                    <td><form action="{{ url_for('update1_pais', id_pais=pais[0]) }}" method="POST"><button>Editar</button></form></td>
+                    <td><form action="{{ url_for('delete_pais', id_pais=pais[0]) }}" method="POST">
+                        <button type="submit">Eliminar</button>
+                    </form></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endblock %}
 {% endblock %}
