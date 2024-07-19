@@ -1,10 +1,10 @@
 
-from flask import Flask, request, render_template, redirect, url_for
+import psycopg2
+from flask import Flask, redirect, render_template, request, url_for
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms.fields import PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired
-import psycopg2
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -28,7 +28,7 @@ def login():
 def libros():
     # Conectar con la base de datos
     conexion = psycopg2.connect(
-        database="biblioteca3a",
+        database="biblioteca",
         user="postgres",
         password="gnieva",
         host="localhost",
@@ -48,8 +48,7 @@ def libros():
 @app.route('/autores')
 def autores():
     # Conectar con la base de datos
-    conexion = psycopg2.connect(
-        database="biblioteca3a",
+    conexion = psycopg2.connect(database="biblioteca",
         user="postgres",
         password="gnieva",
         host="localhost",
@@ -74,7 +73,7 @@ def editoriales():
 def paises():
      # Conectar con la base de datos
     conexion = psycopg2.connect(
-        database="biblioteca3a",
+        database="biblioteca",
         user="postgres",
         password="gnieva",
         host="localhost",
@@ -94,7 +93,7 @@ def paises():
 @app.route('/update_pais1/<int:id_pais>', methods=['POST'])
 def update_pais(id_pais):
     conexion = psycopg2.connect(
-        database="biblioteca3a",
+        database="biblioteca",
         user="postgres",
         password="gnieva",
         host="localhost",
@@ -132,7 +131,7 @@ def update_pais2(id_pais):
 @app.route('/delete_pais/<int:id_pais>', methods=['POST'])
 def delete_pais(id_pais):
     conexion = psycopg2.connect(
-        database="biblioteca3a",
+        database="biblioteca",
         user="postgres",
         password="gnieva",
         host="localhost",
@@ -140,7 +139,7 @@ def delete_pais(id_pais):
     )
     cursor = conexion.cursor()
   
-    cursor.execute('''DELETE FROM pais WHERE id_pais=%s''', (id_pais,)) 
+    cursor.execute('''DELETE FROM pais WHERE id=%s''', (id_pais,)) 
     conexion.commit()
     cursor.close() 
     conexion.close() 
