@@ -55,9 +55,12 @@ def libros():
 @app.route('/insertar_libro', methods=['GET', 'POST'])
 def insertar_libro():
     form = LibrosForm()
+
     autores = obtener_autores()
     form.fk_autor.choices = [(autor[0], f"{autor[1]} {autor[2]}") for autor in autores]
-    # form.fk_autor.choices = [(autor['id'], f'{autor['nombre']} {autor['apellido']}') for autor in autores]
+    editoriales = obtener_editoriales()
+    form.fk_editorial.choices = [(editorial[0], f"{editorial[1]}") for editorial in editoriales]
+   
     if form.validate_on_submit():
         # Si se dió click en el botón del form y no faltan datos
         # se recupera la información que el user escribió en el form
@@ -75,7 +78,7 @@ def insertar_libro():
         cursor.close()
         db.desconectar(conn)
         return redirect(url_for('libros'))
-    return render_template('insertar_libro.html', form=form, autores=autores)
+    return render_template('insertar_libro.html', form=form, autores=autores, editoriales=editoriales)
 
 def obtener_autores():
     conn = db.conectar()
@@ -95,6 +98,22 @@ def obtener_autores():
     db.desconectar(conn)
     return autores
 
+def obtener_editoriales():
+    conn = db.conectar()
+    cursor = conn.cursor()
+    cursor.execute('''SELECT id, nombre FROM editorial''')
+    editoriales = cursor.fetchall() 
+    # Crear una lista de diccionarios con los campos deseados
+    lista_editoriales = []
+    for editorial in editoriales:
+        editorial_dict = {
+            'id': editorial[0],
+            'nombre': editorial[1],
+        }
+        lista_editoriales.append(editorial_dict)
+    cursor.close()
+    db.desconectar(conn)
+    return editoriales
 
 @app.route('/autores')
 def autores():
