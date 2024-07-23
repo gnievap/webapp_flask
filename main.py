@@ -1,3 +1,4 @@
+import os
 
 import psycopg2
 from flask import Flask, redirect, render_template, request, url_for
@@ -10,7 +11,12 @@ import db
 from forms import LibrosForm
 
 app = Flask(__name__)
+# Configura las variables de entorno
+app.config['FLASK_APP'] = 'main.py'
+app.config['FLASK_DEBUG'] = 1
+
 bootstrap = Bootstrap(app)
+app.config['SECRET_KEY'] = 'SUPER SECRETO'
 
 class LoginForm (FlaskForm):
     username = StringField('Nombre de usuario', validators=[DataRequired()])
@@ -49,6 +55,9 @@ def libros():
 @app.route('/insertar_libro', methods=['GET', 'POST'])
 def insertar_libro():
     form = LibrosForm()
+    autores = obtener_autores()
+    form.fk_autor.choices = [(autor[0], f"{autor[1]} {autor[2]}") for autor in autores]
+    # form.fk_autor.choices = [(autor['id'], f'{autor['nombre']} {autor['apellido']}') for autor in autores]
     if form.validate_on_submit():
         # Si se dió click en el botón del form y no faltan datos
         # se recupera la información que el user escribió en el form
@@ -64,9 +73,28 @@ def insertar_libro():
                        VALUES (%s, %s, %s, %s)''', (titulo, fk_autor, fk_editorial, edicion))
         conn.commit()
         cursor.close()
-        db.desconectar()
+        db.desconectar(conn)
         return redirect(url_for('libros'))
-    return render_template('insertar_libro.html', form=form)
+    return render_template('insertar_libro.html', form=form, autores=autores)
+
+def obtener_autores():
+    conn = db.conectar()
+    cursor = conn.cursor()
+    cursor.execute('''SELECT * FROM autor''')
+    autores = cursor.fetchall() 
+    # Crear una lista de diccionarios con los campos deseados
+    lista_autores = []
+    for autor in autores:
+        autor_dict = {
+            'id': autor[0],
+            'nombre': autor[2],
+            'apellido': autor[3]
+        }
+        lista_autores.append(autor_dict)
+    cursor.close()
+    db.desconectar(conn)
+    return autores
+
 
 @app.route('/autores')
 def autores():
@@ -85,7 +113,13 @@ def autores():
 
 @app.route('/editoriales')
 def editoriales():
-    return 'Hola mundo'
+    conn = db.conectar()
+    cursor = conn.cursor()
+    cursor.execute('''SELECT * FROM editoriales_view''')
+    datos = cursor.fetchall()
+    cursor.close()
+    db.desconectar(conn)
+    return render_template('editoriales.html', datos=datos)
 
 @app.route('/paises')
 def paises():

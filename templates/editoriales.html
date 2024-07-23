@@ -1,0 +1,42 @@
+{% extends 'bootstrap/base.html' %}
+{% block head %}
+    {{ super() }}
+    <title>
+        {% block title %} 
+            Webapp Flask
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="../static/style/style.css">
+{% endblock %}
+
+{% block body %}
+
+    {% block navbar %}
+        {% include 'navbar.html' %}
+    {% endblock %}
+
+    {% block content %}
+    <div class="container fluid">
+        <h2>Editoriales</h2>
+        <br>
+        <table class="table table-success table-striped">
+            <tr>
+                <th scope="col">Id. de editorial</th>
+                <th scope="col">Editorial</th>
+                <th scope="col">País de origen</th>
+            </tr>
+            {% for editorial in datos %}
+                <tr>
+                    <td>{{ editorial[0] }}</td>
+                    <td>{{ editorial[1] }}</td>
+                    <td>{{ editorial[2] }}</td>
+                    <td><form action="{{ url_for('update1_pais', id_editorial=editorial[0]) }}" method="POST"><button class="btn btn-primary">Editar</button></form></td>
+                    <td><form action="{{ url_for('delete_pais', id_editorial=editorial[0]) }}" method="POST">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
+                    </form></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endblock %}
+{% endblock %}
