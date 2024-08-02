@@ -1,13 +1,15 @@
 import os
 
 import psycopg2
-from flask import Flask, redirect, render_template, request, url_for
+from flask import (Flask, flash, redirect, render_template, request, session,
+                   url_for)
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms.fields import PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired
 
 import db
+from flask_session import Session
 from forms import LibrosForm
 
 app = Flask(__name__)
@@ -17,6 +19,9 @@ app.config['FLASK_DEBUG'] = 1
 
 bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = 'SUPER SECRETO'
+app.config['SESSION_TYPE'] = 'filesystem'
+
+Session(app)
 
 class LoginForm (FlaskForm):
     username = StringField('Nombre de usuario', validators=[DataRequired()])
@@ -33,9 +38,28 @@ def index():
 def error404(error):
     return render_template('404.html')
 
-@app.route('/login')
+@app.route("/login", methods=["GET", "POST"])
 def login():
     login_form = LoginForm()
+    if login_form.validate_on_submit():
+    #if request.method == "POST":
+        # Procesa el formulario de inicio de sesión aquí
+        correo = request.form["correo"]
+        palabra_secreta = request.form["palabra_secreta"]
+
+        # Verifica las credenciales (solo como ejemplo)
+        if correo == "admin_biblio" and palabra_secreta == "tu_contraseña":
+            session["usuario"] = "admin_biblio"  # Inicia sesión
+            return redirect(url_for("ruta_protegida"))
+        else:
+            flash("Credenciales incorrectas", "error")
+
+    return render_template("login.html")  # Muestra el formulario
+
+
+# @app.route('/login')
+# def login():
+#     login_form = LoginForm()
 
 @app.route('/libros')
 def libros():
