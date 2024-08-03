@@ -1,7 +1,40 @@
-<div class="container">
-    <form action="{{url_for('login')}}" >
-        {{ login_form.username.label }}
-        {{ login_form.username }}
-    </form>
-    <!-- {{ wtf.quick_form(login_form, button_map={'submit': 'btn btn-success'}) }} -->
-</div>
+{% extends 'bootstrap/base.html' %}
+{% block head %}
+    {{ super() }}
+    <title>
+        {% block title %} 
+        Webapp Flask
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" href="../static/style/style.css">
+{% endblock %}
+
+{% block body %}
+
+    {% block navbar %}
+        {% include 'navbar.html' %}
+    {% endblock %}
+
+    {% block content %}
+        <div class="container fluid">
+            <h2>Inicia sesión</h2>
+            <form action="{{url_for('login')}}" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.username.label }}
+                    {{ form.username }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password }}
+                </div>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+                <div class="form-group">
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    {% endblock %}
+{% endblock %}

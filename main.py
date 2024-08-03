@@ -10,7 +10,7 @@ from wtforms.validators import DataRequired
 
 import db
 from flask_session import Session
-from forms import LibrosForm
+from forms import LibrosForm, LoginForm
 
 app = Flask(__name__)
 # Configura las variables de entorno
@@ -22,12 +22,6 @@ app.config['SECRET_KEY'] = 'SUPER SECRETO'
 app.config['SESSION_TYPE'] = 'filesystem'
 
 Session(app)
-
-class LoginForm (FlaskForm):
-    username = StringField('Nombre de usuario', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Enviar')
-
 
 
 @app.route('/')
@@ -54,7 +48,7 @@ def login():
         else:
             flash("Credenciales incorrectas", "error")
 
-    return render_template("login.html")  # Muestra el formulario
+    return render_template("login.html", form=login_form)  # Muestra el formulario
 
 
 # @app.route('/login')
