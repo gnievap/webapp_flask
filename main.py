@@ -5,6 +5,7 @@ from flask import (Flask, flash, redirect, render_template, request, session,
                    url_for)
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
+from werkzeug.security import check_password_hash
 from wtforms.fields import PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired
 
@@ -36,24 +37,45 @@ def error404(error):
 def login():
     login_form = LoginForm()
     if login_form.validate_on_submit():
-    #if request.method == "POST":
         # Procesa el formulario de inicio de sesión aquí
-        correo = request.form["correo"]
-        palabra_secreta = request.form["palabra_secreta"]
+        username = request.form["username"]
+        password = request.form["password"]
 
-        # Verifica las credenciales (solo como ejemplo)
-        if correo == "admin_biblio" and palabra_secreta == "tu_contraseña":
-            session["usuario"] = "admin_biblio"  # Inicia sesión
+        user = buscar_usuario(username)
+
+        stored_password_hash = user["password"]  
+        if check_password_hash(stored_password_hash, password):
+            session["usuario"] = username  # Inicia sesión
             return redirect(url_for("ruta_protegida"))
+        
+        # if username == "admin_biblio" and password == "tu_contraseña":
+        #     session["usuario"] = "admin_biblio"  # Inicia sesión
+        #     return redirect(url_for("ruta_protegida"))
         else:
             flash("Credenciales incorrectas", "error")
 
     return render_template("login.html", form=login_form)  # Muestra el formulario
 
 
-# @app.route('/login')
-# def login():
-#     login_form = LoginForm()
+
+def buscar_usuario(username):
+    try:
+        query = "SELECT * FROM usuarios WHERE nombre_de_usuario = %s"
+        conn = db.conectar()
+        cursor = conn.cursor()
+        cursor.execute(query, (username,))
+        user = cursor.fetchone()
+        return user
+    except psycopg2.Error as e:
+        print(f"Error al buscar usuario: {e}")
+        return None
+    finally:
+        cursor.close()
+
+
+@app.route("/welcome_admin", methods=["GET", "POST"])
+def welcome_admin():
+    return render_template("welcome.html")
 
 @app.route('/libros')
 def libros():
